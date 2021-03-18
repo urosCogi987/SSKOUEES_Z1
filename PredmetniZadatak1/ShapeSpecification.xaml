@@ -1,0 +1,59 @@
+﻿<Window x:Class="PredmetniZadatak1.ShapeSpecification"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PredmetniZadatak1"
+        mc:Ignorable="d"
+        Title="ShapeSpecification" Height="330" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Background="BlanchedAlmond">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+            <ColumnDefinition Width="150"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TextBlock Name ="widthTextBlock" Grid.Row="1" FontSize="15" Text="Width: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
+        <TextBlock Name ="heightTextBlock" Grid.Row="2" FontSize="15" Text="Height: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
+        <TextBlock Name ="fillColorTextBlock" Grid.Row="3" FontSize="15" Text="Fill Color: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
+        <TextBlock Name ="borderColorTextBlock" Grid.Row="4" FontSize="15" Text="Border Color: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
+        <TextBlock Name ="borderThicknessTextBlock" Grid.Row="5" FontSize="15" Text="Border Thickness: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
+
+        <TextBox Name="objWidth" Grid.Row="1" Grid.Column="1" Margin="0,5,10,0" Text="{Binding Path=ObjWidth}" TextChanged="objWidth_TextChanged"/>
+        <TextBox Name="objHeight" Grid.Row="2" Grid.Column="1" Margin="0,5,10,0" />
+        <!--<ComboBox Name="fillColorCmbBox" Grid.Row="3" Grid.Column="1" Margin="0,5,10,0" >
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Width="40px" Height="20px" Background="{Binding Name}"></TextBlock>
+                        <Label Content="{Binding Name}"></Label>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <ComboBox Name="borderColorCmbBtn" Grid.Row="4" Grid.Column="1" Margin="0,5,10,0">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Width="40px" Height="20px" Background="{Binding Name}"></TextBlock>
+                        <Label Content="{Binding Name}"></Label>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>-->
+        <TextBox Name="objborderThickness" Grid.Row="5" Grid.Column="1" Margin="0,5,10,0"></TextBox>
+
+        <Button Name="cancelBtn" Content="Cancel" Grid.Row="6" Grid.Column="0" Margin="5,6,5,5" Click="cancelBtn_Click"></Button>
+        <Button Name="drawBtn" Content="Draw" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="drawBtn_Click"></Button>
+
+        <!--<Button Name="changebtn" Cursor="Hand" Content="Change!" Grid.Row="6" Margin="5,6,20,10" Grid.Column="1" Click="change_Click" Background="#FFA5D881"/>-->
+    </Grid>
+</Window>
