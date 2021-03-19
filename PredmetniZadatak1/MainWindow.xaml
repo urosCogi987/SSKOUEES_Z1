@@ -17,8 +17,15 @@
 
         </ToolBar>
         <Canvas DockPanel.Dock ="Bottom" Name="MyCanvas" Background="LightYellow" Focusable="True" 
-                MouseLeftButtonDown="MyCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp" MouseRightButtonUp="MyCanvas_MouseRightButtonUp">
+                    MouseLeftButtonDown="MyCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp" MouseRightButtonUp="MyCanvas_MouseRightButtonUp">
 
+            <Path Stroke="Red" StrokeThickness="2" Name="UIPath">
+                <Path.Data>
+                    <PathGeometry>
+
+                    </PathGeometry>
+                </Path.Data>
+            </Path>
         </Canvas>
     </DockPanel>
 </Window>

@@ -27,9 +27,9 @@
         <TextBlock Name ="borderColorTextBlock" Grid.Row="4" FontSize="15" Text="Border Color: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
         <TextBlock Name ="borderThicknessTextBlock" Grid.Row="5" FontSize="15" Text="Border Thickness: " VerticalAlignment="Center" Margin="10,0,0,0"></TextBlock>
 
-        <TextBox Name="objWidth" Grid.Row="1" Grid.Column="1" Margin="0,5,10,0" Text="{Binding Path=ObjWidth}" TextChanged="objWidth_TextChanged"/>
-        <TextBox Name="objHeight" Grid.Row="2" Grid.Column="1" Margin="0,5,10,0" />
-        <!--<ComboBox Name="fillColorCmbBox" Grid.Row="3" Grid.Column="1" Margin="0,5,10,0" >
+        <TextBox Name="objWidth" Grid.Row="1" Grid.Column="1" Margin="0,5,10,0" Text="{Binding Path=ObjWidth}"/>
+        <TextBox Name="objHeight" Grid.Row="2" Grid.Column="1" Margin="0,5,10,0" Text="{Binding Path=ObjHeight}"/>
+        <ComboBox Name="fillColorCmbBox" Grid.Row="3" Grid.Column="1" Margin="0,5,10,0" SelectionChanged="fillColorCmbBox_SelectionChanged">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -39,7 +39,7 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-        <ComboBox Name="borderColorCmbBtn" Grid.Row="4" Grid.Column="1" Margin="0,5,10,0">
+        <ComboBox Name="borderColorCmbBox" Grid.Row="4" Grid.Column="1" Margin="0,5,10,0" SelectionChanged="borderColorCmbBox_SelectionChanged">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -48,8 +48,8 @@
                     </StackPanel>
                 </DataTemplate>
             </ComboBox.ItemTemplate>
-        </ComboBox>-->
-        <TextBox Name="objBorderThickness" Grid.Row="5" Grid.Column="1" Margin="0,5,10,0"></TextBox>
+        </ComboBox>
+        <TextBox Name="objBorderThickness" Grid.Row="5" Grid.Column="1" Margin="0,5,10,0" Text="{Binding Path=ObjBorderThickness}"></TextBox>
 
         <Button Name="cancelBtn" Content="Cancel" Grid.Row="6" Grid.Column="0" Margin="5,6,5,5" Click="cancelBtn_Click"></Button>
         <Button Name="drawBtn" Content="Draw" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="drawBtn_Click"></Button>
