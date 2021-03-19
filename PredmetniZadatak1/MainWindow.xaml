@@ -17,7 +17,7 @@
 
         </ToolBar>
         <Canvas DockPanel.Dock ="Bottom" Name="MyCanvas" Background="LightYellow" Focusable="True" 
-                MouseLeftButtonDown="MyCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp">
+                MouseLeftButtonDown="MyCanvas_MouseLeftButtonDown" MouseLeftButtonUp="MyCanvas_MouseLeftButtonUp" MouseRightButtonUp="MyCanvas_MouseRightButtonUp">
 
         </Canvas>
     </DockPanel>

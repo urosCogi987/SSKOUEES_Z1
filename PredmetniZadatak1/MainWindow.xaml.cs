@@ -20,8 +20,7 @@ namespace PredmetniZadatak1
     /// </summary>
     public partial class MainWindow : Window
     {
-        //Brush customColor;
-        //Random r = new Random();                
+        public List<Point> polygonPoints;
 
         private enum MyShape
         {
@@ -34,6 +33,7 @@ namespace PredmetniZadatak1
         public MainWindow()
         {
             InitializeComponent();
+            polygonPoints = new List<Point>();
         }
 
         //private void AddOrRemoveItem(object sender, MouseButtonEventArgs e)
@@ -93,55 +93,72 @@ namespace PredmetniZadatak1
 
         private void EllipseButton_Click(object sender, RoutedEventArgs e)
         {
-            currentShape = MyShape.Ellipse;
-            ShapeSpecification shapenzi = new ShapeSpecification();
-            shapenzi.ShowDialog();
+            currentShape = MyShape.Ellipse;            
         }
 
         private void RectangleButton_Click(object sender, RoutedEventArgs e)
         {
-            currentShape = MyShape.Rectangle;
-            ShapeSpecification shapenzi = new ShapeSpecification();
-            shapenzi.ShowDialog();
+            currentShape = MyShape.Rectangle;            
         }
 
         private void PolygonButton_Click(object sender, RoutedEventArgs e)
         {
-            currentShape = MyShape.Polygon;
-            ShapeSpecification shapenzi = new ShapeSpecification();
-            shapenzi.ShowDialog();
+            currentShape = MyShape.Polygon;            
         }
 
         private void DrawEllipse()
-        {
-            Ellipse newEllipse = new Ellipse()
-            {
-                Stroke = Brushes.Black,
-                Fill = Brushes.Purple,
-                StrokeThickness = 4,
-                Height = 10,
-                Width = 10
-            };
-
-            // Defines the left part of the ellipse
-            newEllipse.SetValue(Canvas.LeftProperty, clickPoint.X);
-            newEllipse.Width = 100;
-
-            // Defines the top part of the ellipse
-            newEllipse.SetValue(Canvas.TopProperty, clickPoint.Y - 50);
-            newEllipse.Height = 100;
-
-            MyCanvas.Children.Add(newEllipse);
+        {            
+            var cursorPosition = Mouse.GetPosition(MyCanvas);
+            Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
+            ShapeSpecification shapenzi = new ShapeSpecification("Ellipse", startingPosition);
+            shapenzi.ShowDialog();            
         }
 
         private void DrawRectangle()
         {
-
+            var cursorPosition = Mouse.GetPosition(MyCanvas);
+            Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
+            ShapeSpecification shapenzi = new ShapeSpecification("Rectangle", startingPosition);
+            shapenzi.ShowDialog();
         }
 
         private void DrawPolygon()
         {
+            var cursorPosition = Mouse.GetPosition(MyCanvas);
+            Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
+            ShapeSpecification shapenzi = new ShapeSpecification("Polygon", startingPosition, polygonPoints);
+            shapenzi.ShowDialog();
+        }
 
-        }        
+        private void MyCanvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var cursorPosition = Mouse.GetPosition(MyCanvas);
+            Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
+            Point pointPosition = e.GetPosition((Canvas)sender);
+
+            if (currentShape == MyShape.Polygon)
+            {
+                Ellipse dot = new Ellipse();
+                dot.Stroke = new SolidColorBrush(Colors.Black);
+                dot.StrokeThickness = 3;
+                dot.Height = 3;
+                dot.Width = 3;
+                dot.Fill = new SolidColorBrush(Colors.Black);
+
+                if (polygonPoints.Count > 0)
+                {
+                    Line line = new Line() { X1 = polygonPoints[polygonPoints.Count - 1].X, Y1 = polygonPoints[polygonPoints.Count - 1].Y,
+                        X2 = pointPosition.X, Y2 = pointPosition.Y, Stroke = Brushes.Black };
+                    MyCanvas.Children.Add(line);
+                }
+                
+                MyCanvas.Children.Add(dot);
+                Canvas.SetLeft(dot, pointPosition.X);
+                Canvas.SetTop(dot, pointPosition.Y);
+
+                polygonPoints.Add(pointPosition);
+                
+            }
+        }
     }
 }
