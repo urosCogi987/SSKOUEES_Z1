@@ -54,6 +54,8 @@
         <Button Name="cancelBtn" Content="Cancel" Grid.Row="6" Grid.Column="0" Margin="5,6,5,5" Click="cancelBtn_Click"></Button>
         <Button Name="drawBtn" Content="Draw" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="drawBtn_Click"></Button>
 
-        <!--<Button Name="changebtn" Cursor="Hand" Content="Change!" Grid.Row="6" Margin="5,6,20,10" Grid.Column="1" Click="change_Click" Background="#FFA5D881"/>-->
+        <Button Name="ChoseImageBtn" Content="Chose Image" Grid.Row="3" Click="ChoseImageBtn_Click" Margin="10,6,5,0"></Button>
+        <TextBlock Name="imageSource" Grid.Row="3" Background="white" Grid.Column="1" FontSize="14" Text="{Binding Path=ImgPath}" 
+                   VerticalAlignment="Center"  Margin="10,0,0,0"></TextBlock>
     </Grid>
 </Window>

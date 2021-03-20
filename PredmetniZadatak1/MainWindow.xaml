@@ -14,6 +14,11 @@
                          Content="Rectangle" Height="50" Width="80" GroupName="ShapeGroup" Click="RectangleButton_Click"/>
             <RadioButton x:Name="PolygonButton" Background="#FF7094DB" Height="50" Width="80"
                          Content="Polygon" GroupName="ShapeGroup" Click="PolygonButton_Click"/>
+            <RadioButton Name="ImageButton" Background="#FF7094DB" Content="Image" Height="50" Width="80" Click="ImageButton_Click"/>
+            <RadioButton Name="UndoButton" Background="#FF7094DB" Content="Undo" HorizontalAlignment="Right" Height="50" 
+                         Margin="200,0,0,0" Width="80" RenderTransformOrigin="2.05,0.46" GroupName="CommandGroup" Click="UndoButton_Click"/>
+            <RadioButton Name="RedoButton" Background="#FF7094DB" Content="Redo" Height="50" Width="80" GroupName="CommandGroup" Click="RedoButton_Click"/>
+            <RadioButton Name="ClearButton" Background="#FF7094DB" Content="Clear" Height="50" Width="80" GroupName="CommandGroup" Click="ClearButton_Click"/>
 
         </ToolBar>
         <Canvas DockPanel.Dock ="Bottom" Name="MyCanvas" Background="LightYellow" Focusable="True" 

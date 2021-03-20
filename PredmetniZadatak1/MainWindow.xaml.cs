@@ -24,7 +24,7 @@ namespace PredmetniZadatak1
 
         private enum MyShape
         {
-            Ellipse, Rectangle, Polygon
+            Ellipse, Rectangle, Polygon, Image
         };
 
         private MyShape currentShape = MyShape.Ellipse;
@@ -86,6 +86,10 @@ namespace PredmetniZadatak1
                     DrawPolygon();
                     break;
 
+                case MyShape.Image:
+                    InputImage();
+                    break;
+
                 default:
                     return;
             }
@@ -106,28 +110,56 @@ namespace PredmetniZadatak1
             currentShape = MyShape.Polygon;            
         }
 
+        private void ImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentShape = MyShape.Image;
+        }
+
+        private void UndoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void RedoButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void DrawEllipse()
         {            
             var cursorPosition = Mouse.GetPosition(MyCanvas);
             Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
-            ShapeSpecification shapenzi = new ShapeSpecification("Ellipse", startingPosition);
-            shapenzi.ShowDialog();            
+            ShapeSpecification shape = new ShapeSpecification("Ellipse", startingPosition);
+            shape.ShowDialog();            
         }
 
         private void DrawRectangle()
         {
             var cursorPosition = Mouse.GetPosition(MyCanvas);
             Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
-            ShapeSpecification shapenzi = new ShapeSpecification("Rectangle", startingPosition);
-            shapenzi.ShowDialog();
+            ShapeSpecification shape = new ShapeSpecification("Rectangle", startingPosition);
+            shape.ShowDialog();
         }
 
         private void DrawPolygon()
         {
             var cursorPosition = Mouse.GetPosition(MyCanvas);
             Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
-            ShapeSpecification shapenzi = new ShapeSpecification("Polygon", startingPosition, polygonPoints);
-            shapenzi.ShowDialog();
+            ShapeSpecification shape = new ShapeSpecification("Polygon", startingPosition, polygonPoints);
+            shape.ShowDialog();
+        }
+
+        private void InputImage()
+        {
+            var cursorPosition = Mouse.GetPosition(MyCanvas);
+            Point startingPosition = new Point(cursorPosition.X, cursorPosition.Y);
+            ShapeSpecification image = new ShapeSpecification("Image", startingPosition);
+            image.ShowDialog();
         }
 
         private void MyCanvas_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -160,5 +192,7 @@ namespace PredmetniZadatak1
                 
             }
         }
+
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace PredmetniZadatak1
         private Color bordercolor;
         private string objborderthickness;
         private string typeComponent = String.Empty;
+
+        private string imgpath;
+        private Image img;
+
+        
+        
+
+
 
         // Starting coordinates
         private double startingX;
@@ -122,6 +131,24 @@ namespace PredmetniZadatak1
             set { polygonPoints = value; }
         }
 
+        public string ImgPath
+        {
+            get { return imgpath; }
+            set
+            {
+                if (value != imgpath)
+                {
+                    imgpath = value;
+                    OnPropertyChanged("ImgPath");
+                }
+            }
+        }
+
+        public Image Img
+        {
+            get { return img; }
+            set { img = value; }
+        }
 
         #endregion
 
@@ -144,6 +171,33 @@ namespace PredmetniZadatak1
             fillColorCmbBox.SelectedIndex = 10;
             borderColorCmbBox.ItemsSource = typeof(Colors).GetProperties();
             borderColorCmbBox.SelectedIndex = 11;
+
+            if (typeComponent == "Image")
+            {
+                fillColorCmbBox.Visibility = Visibility.Hidden;
+                fillColorTextBlock.Visibility = Visibility.Hidden;
+                borderColorCmbBox.Visibility = Visibility.Hidden;
+                borderColorTextBlock.Visibility = Visibility.Hidden;
+                borderThicknessTextBlock.Visibility = Visibility.Hidden;
+                objBorderThickness.Visibility = Visibility.Hidden;
+                ChoseImageBtn.Visibility = Visibility.Visible;
+                imageSource.Visibility = Visibility.Visible;
+            }
+            else if (typeComponent == "Polygon")
+            {
+                widthTextBlock.Visibility = Visibility.Hidden;
+                objWidth.Visibility = Visibility.Hidden;
+                heightTextBlock.Visibility = Visibility.Hidden;
+                objHeight.Visibility = Visibility.Hidden;
+                ChoseImageBtn.Visibility = Visibility.Hidden;
+                imageSource.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                ChoseImageBtn.Visibility = Visibility.Hidden;
+                imageSource.Visibility = Visibility.Hidden;
+            }
+            
         }
         #endregion
 
@@ -154,61 +208,114 @@ namespace PredmetniZadatak1
 
         private void drawBtn_Click(object sender, RoutedEventArgs e)
         {
-            double resultHeight;
+            //double resultHeight;
 
             MainWindow main = ((MainWindow)Application.Current.MainWindow);
             SolidColorBrush fillColorCmbBox = new SolidColorBrush(FillColor);
             SolidColorBrush borderColorCmbBox = new SolidColorBrush(BorderColor);
 
-            //if (!Double.TryParse(objWidth.Text, out resultHeight) || resultHeight < 1)
-            if (typeComponent == "Ellipse")
-            {
-                Ellipse ellipse = new Ellipse();
-                ellipse.Name = "rectangle_PROBA";
-                ellipse.Fill = fillColorCmbBox;
-                ellipse.Stroke = borderColorCmbBox;
-                ellipse.Width = Double.Parse(objWidth.Text);
-                ellipse.Height = Double.Parse(objHeight.Text);
-                ellipse.StrokeThickness = Double.Parse(objBorderThickness.Text);
-                main.MyCanvas.Children.Add(ellipse);
-                Canvas.SetLeft(ellipse, StartingX);
-                Canvas.SetTop(ellipse, StartingY);
-                this.Close();
-            }
-            if (typeComponent == "Rectangle")
-            {
-                Rectangle rectangle = new Rectangle();
-                rectangle.Name = "rectangle_PROBA";
-                rectangle.Fill = fillColorCmbBox;
-                rectangle.Stroke = borderColorCmbBox;
-                rectangle.Width = Double.Parse(objWidth.Text);
-                rectangle.Height = Double.Parse(objHeight.Text);
-                rectangle.StrokeThickness = Double.Parse(objBorderThickness.Text);
-                main.MyCanvas.Children.Add(rectangle);
-                Canvas.SetLeft(rectangle, startingX);
-                Canvas.SetTop(rectangle, startingY);
-                this.Close();
-            }
-            if (typeComponent == "Polygon")
-            {
+            bool isValid = true;
 
-                Polygon polygon = new Polygon();
-                foreach (Point pPoint in polygonPoints)
+            double objectWidth;
+            double objectHeight;
+            double borderThiccness;
+
+            if ((!Double.TryParse(objWidth.Text, out objectWidth) || objectWidth <= 0) && objWidth.Visibility == Visibility.Visible)
+            {
+                isValid = false;
+                objWidth.BorderBrush = Brushes.Red;
+            }
+            else
+                objWidth.BorderBrush = Brushes.Green;
+
+            if ((!Double.TryParse(objHeight.Text, out objectHeight) || objectHeight <= 0) && objHeight.Visibility == Visibility.Visible)
+            {
+                isValid = false;
+                objHeight.BorderBrush = Brushes.Red;
+            }
+            else
+                objHeight.BorderBrush = Brushes.Green;
+
+            if ((!Double.TryParse(objBorderThickness.Text, out borderThiccness) || borderThiccness <= 0) && objBorderThickness.Visibility == Visibility.Visible)
+            {
+                isValid = false;
+                objBorderThickness.BorderBrush = Brushes.Red;
+            }
+            else
+                objBorderThickness.BorderBrush = Brushes.Green;
+
+
+
+            if (isValid == false)
+            {
+                MessageBox.Show("Enter valid data!");
+            }
+            else
+            {
+                if (typeComponent == "Ellipse")
                 {
-                    polygon.Points.Add(pPoint);                    
+
+
+                    Ellipse ellipse = new Ellipse();
+                    ellipse.Name = "rectangle_PROBA";
+                    ellipse.Fill = fillColorCmbBox;
+                    ellipse.Stroke = borderColorCmbBox;
+                    ellipse.Width = Double.Parse(objWidth.Text);
+                    ellipse.Height = Double.Parse(objHeight.Text);
+                    ellipse.StrokeThickness = Double.Parse(objBorderThickness.Text);
+                    main.MyCanvas.Children.Add(ellipse);
+                    Canvas.SetLeft(ellipse, StartingX);
+                    Canvas.SetTop(ellipse, StartingY);
+                    this.Close();
                 }
-               
-                polygon.Name = "polygon_PROBA";
-                polygon.Fill = fillColorCmbBox;
-                polygon.Stroke = borderColorCmbBox;
-                polygon.StrokeThickness = Double.Parse(objBorderThickness.Text);
-                main.MyCanvas.Children.Add(polygon);
+                if (typeComponent == "Rectangle")
+                {
+                    Rectangle rectangle = new Rectangle();
+                    rectangle.Name = "rectangle_PROBA";
+                    rectangle.Fill = fillColorCmbBox;
+                    rectangle.Stroke = borderColorCmbBox;
+                    rectangle.Width = Double.Parse(objWidth.Text);
+                    rectangle.Height = Double.Parse(objHeight.Text);
+                    rectangle.StrokeThickness = Double.Parse(objBorderThickness.Text);
+                    main.MyCanvas.Children.Add(rectangle);
+                    Canvas.SetLeft(rectangle, startingX);
+                    Canvas.SetTop(rectangle, startingY);
+                    this.Close();
+                }
+                if (typeComponent == "Polygon")
+                {
 
-                main.MyCanvas.Children.RemoveRange(main.MyCanvas.Children.Count - 2 * main.polygonPoints.Count, 2 * main.polygonPoints.Count - 1);
-                main.polygonPoints.Clear();
+                    Polygon polygon = new Polygon();
+                    foreach (Point pPoint in polygonPoints)
+                    {
+                        polygon.Points.Add(pPoint);
+                    }
 
-                this.Close();
-            }
+                    polygon.Name = "polygon_PROBA";
+                    polygon.Fill = fillColorCmbBox;
+                    polygon.Stroke = borderColorCmbBox;
+                    polygon.StrokeThickness = Double.Parse(objBorderThickness.Text);
+                    main.MyCanvas.Children.Add(polygon);
+
+                    main.MyCanvas.Children.RemoveRange(main.MyCanvas.Children.Count - 2 * main.polygonPoints.Count, 2 * main.polygonPoints.Count - 1);
+                    main.polygonPoints.Clear();
+
+                    this.Close();
+                }
+                if (typeComponent == "Image")
+                {
+                    Img.Width = Double.Parse(objWidth.Text);
+                    Img.Height = Double.Parse(objHeight.Text);
+                    Img.Stretch = Stretch.Fill;
+                    main.MyCanvas.Children.Add(Img);
+
+                    Canvas.SetLeft(Img, StartingX);
+                    Canvas.SetTop(Img, StartingY);
+
+                    Img.Name = "image_" + StartingX + "_" + StartingY;
+                    this.Close();
+                }
+            }            
         }
 
         public void OnPropertyChanged(String propertyName)
@@ -226,5 +333,22 @@ namespace PredmetniZadatak1
         {
             BorderColor = (Color)(borderColorCmbBox.SelectedItem as PropertyInfo).GetValue(null, null);
         }
+
+        private void ChoseImageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Img = new Image();
+            OpenFileDialog op = new OpenFileDialog();
+            op.Title = "Select a picture";
+            op.Filter = "All supported graphics|*.jpg;*.jpeg;*.png|" +
+              "JPEG (.jpg;.jpeg)|*.jpg;*.jpeg|" +
+              "Portable Network Graphic (.png)|.png";
+            if (op.ShowDialog() == true)
+            {
+                Img.Source = new BitmapImage(new Uri(op.FileName));
+                string[] words = Img.Source.ToString().Split('/');
+                int length = words.Length;
+                ImgPath = words[length - 1];
+            }
+        }       
     }
 }
