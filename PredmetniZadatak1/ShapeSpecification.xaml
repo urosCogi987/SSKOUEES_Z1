@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PredmetniZadatak1"
         mc:Ignorable="d"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="ShapeSpecification" Height="330" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid Background="BlanchedAlmond">
         <Grid.ColumnDefinitions>

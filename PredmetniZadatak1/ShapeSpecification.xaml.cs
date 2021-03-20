@@ -224,7 +224,9 @@ namespace PredmetniZadatak1
                     borderThicknessTextBlock.Visibility = Visibility.Hidden;
                     objBorderThickness.Visibility = Visibility.Hidden;
                     ChoseImageBtn.Visibility = Visibility.Visible;
-                    imageSource.Visibility = Visibility.Visible;                    
+                    imageSource.Visibility = Visibility.Visible;
+
+                    Img = image;
                 }
                 else if (typeComponent == "Polygon")
                 {
@@ -234,6 +236,11 @@ namespace PredmetniZadatak1
                     objHeight.Visibility = Visibility.Hidden;
                     ChoseImageBtn.Visibility = Visibility.Hidden;
                     imageSource.Visibility = Visibility.Hidden;
+
+                    Shape = shape;
+                    fillColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[1]);
+                    borderColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[2]);
+                    ObjBorderThickness = shape.StrokeThickness.ToString();
                 }
                 else
                 {
@@ -243,8 +250,10 @@ namespace PredmetniZadatak1
                     Shape = shape;
                     ObjWidth = shape.Width.ToString();
                     ObjHeight = shape.Height.ToString();
-                   //fillColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[1]);
-                    //borderColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[2]);
+                    // TREBA LEPO DA SE IMENUJE. PUCA OVDE
+                    fillColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[1]);
+                    borderColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[2]);
+                    
                     ObjBorderThickness = shape.StrokeThickness.ToString();
                 }
             }
@@ -261,8 +270,8 @@ namespace PredmetniZadatak1
             //double resultHeight;
 
             MainWindow main = ((MainWindow)Application.Current.MainWindow);
-            SolidColorBrush fillColorCmbBox = new SolidColorBrush(FillColor);
-            SolidColorBrush borderColorCmbBox = new SolidColorBrush(BorderColor);
+            SolidColorBrush fillColorCmbBoxxx = new SolidColorBrush(FillColor);
+            SolidColorBrush borderColorCmbBoxxx = new SolidColorBrush(BorderColor);
 
             bool isValid = true;
 
@@ -307,9 +316,9 @@ namespace PredmetniZadatak1
 
 
                     Ellipse ellipse = new Ellipse();
-                    ellipse.Name = "rectangle_PROBA";
-                    ellipse.Fill = fillColorCmbBox;
-                    ellipse.Stroke = borderColorCmbBox;
+                    ellipse.Name = "ellipse_" + fillColorCmbBox.SelectedIndex.ToString() + "_" + borderColorCmbBox.SelectedIndex.ToString();  // MORAJU DA IMAJU TACNO OVAKO IME
+                    ellipse.Fill = fillColorCmbBoxxx;
+                    ellipse.Stroke = borderColorCmbBoxxx;
                     ellipse.Width = Double.Parse(objWidth.Text);
                     ellipse.Height = Double.Parse(objHeight.Text);
                     ellipse.StrokeThickness = Double.Parse(objBorderThickness.Text);
@@ -324,9 +333,9 @@ namespace PredmetniZadatak1
                 if (typeComponent == "Rectangle")
                 {
                     Rectangle rectangle = new Rectangle();
-                    rectangle.Name = "rectangle_PROBA";
-                    rectangle.Fill = fillColorCmbBox;
-                    rectangle.Stroke = borderColorCmbBox;
+                    rectangle.Name = "rectangle_" + fillColorCmbBox.SelectedIndex.ToString() + "_" + borderColorCmbBox.SelectedIndex.ToString();  // MORAJU DA IMAJU TACNO OVAKO IME                  
+                    rectangle.Fill = fillColorCmbBoxxx;
+                    rectangle.Stroke = borderColorCmbBoxxx;
                     rectangle.Width = Double.Parse(objWidth.Text);
                     rectangle.Height = Double.Parse(objHeight.Text);
                     rectangle.StrokeThickness = Double.Parse(objBorderThickness.Text);
@@ -347,9 +356,9 @@ namespace PredmetniZadatak1
                         polygon.Points.Add(pPoint);
                     }
 
-                    polygon.Name = "polygon_PROBA";
-                    polygon.Fill = fillColorCmbBox;
-                    polygon.Stroke = borderColorCmbBox;
+                    polygon.Name = "polygon_" + fillColorCmbBox.SelectedIndex.ToString() + "_" + borderColorCmbBox.SelectedIndex.ToString();  // MORAJU DA IMAJU TACNO OVAKO IME
+                    polygon.Fill = fillColorCmbBoxxx;
+                    polygon.Stroke = borderColorCmbBoxxx;
                     polygon.StrokeThickness = Double.Parse(objBorderThickness.Text);
                     main.MyCanvas.Children.Add(polygon);
 
@@ -369,6 +378,7 @@ namespace PredmetniZadatak1
 
                     Canvas.SetLeft(Img, StartingX);
                     Canvas.SetTop(Img, StartingY);
+
 
                     Img.Name = "image_" + StartingX + "_" + StartingY;
                     this.Close();
@@ -438,8 +448,12 @@ namespace PredmetniZadatak1
                     Shape.Fill = fillColor;
                     Shape.Stroke = borderColor;
                     Shape.StrokeThickness = Double.Parse(objBorderThickness.Text);
-                    //Shape.Name = "shape_" + cmbBox1.SelectedIndex.ToString() + "_" + cmbBox2.SelectedIndex.ToString();
+                    Shape.Name = "shape_" + fillColorCmbBox.SelectedIndex.ToString() + "_" + borderColorCmbBox.SelectedIndex.ToString();
                     this.Close();
+                }
+                else if (typeComponent == "Image")
+                {
+                    
                 }
             }
         }
