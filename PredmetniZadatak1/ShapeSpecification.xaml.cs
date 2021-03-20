@@ -45,6 +45,13 @@ namespace PredmetniZadatak1
         private double startingY;
         private List<Point> polygonPoints;
 
+        private Shape shape;
+
+        public Shape Shape
+        {
+            get { return shape; }
+            set { shape = value; }
+        }
 
 
 
@@ -159,7 +166,8 @@ namespace PredmetniZadatak1
         }
         
 
-        public ShapeSpecification(string componentType, Point startingPosition, List<Point> polygonPoints = null)
+        public ShapeSpecification(string componentType, Point startingPosition, List<Point> polygonPoints = null, 
+            bool isForChange = false, Shape shape = null, Image image = null)
         {
             InitializeComponent();
             typeComponent = componentType;
@@ -172,6 +180,8 @@ namespace PredmetniZadatak1
             borderColorCmbBox.ItemsSource = typeof(Colors).GetProperties();
             borderColorCmbBox.SelectedIndex = 11;
 
+            //drawBtn.Visibility = Visibility.Visible;
+            changeBtn.Visibility = Visibility.Hidden;
             if (typeComponent == "Image")
             {
                 fillColorCmbBox.Visibility = Visibility.Hidden;
@@ -198,6 +208,46 @@ namespace PredmetniZadatak1
                 imageSource.Visibility = Visibility.Hidden;
             }
             
+            if (isForChange)
+            {
+                objWidth.IsReadOnly = true;
+                objHeight.IsReadOnly = true;
+                drawBtn.Visibility = Visibility.Hidden;
+                changeBtn.Visibility = Visibility.Visible;
+
+                if (typeComponent == "Image")
+                {
+                    fillColorCmbBox.Visibility = Visibility.Hidden;
+                    fillColorTextBlock.Visibility = Visibility.Hidden;
+                    borderColorCmbBox.Visibility = Visibility.Hidden;
+                    borderColorTextBlock.Visibility = Visibility.Hidden;
+                    borderThicknessTextBlock.Visibility = Visibility.Hidden;
+                    objBorderThickness.Visibility = Visibility.Hidden;
+                    ChoseImageBtn.Visibility = Visibility.Visible;
+                    imageSource.Visibility = Visibility.Visible;                    
+                }
+                else if (typeComponent == "Polygon")
+                {
+                    widthTextBlock.Visibility = Visibility.Hidden;
+                    objWidth.Visibility = Visibility.Hidden;
+                    heightTextBlock.Visibility = Visibility.Hidden;
+                    objHeight.Visibility = Visibility.Hidden;
+                    ChoseImageBtn.Visibility = Visibility.Hidden;
+                    imageSource.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    ChoseImageBtn.Visibility = Visibility.Hidden;
+                    imageSource.Visibility = Visibility.Hidden;
+
+                    Shape = shape;
+                    ObjWidth = shape.Width.ToString();
+                    ObjHeight = shape.Height.ToString();
+                   //fillColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[1]);
+                    //borderColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[2]);
+                    ObjBorderThickness = shape.StrokeThickness.ToString();
+                }
+            }
         }
         #endregion
 
@@ -266,6 +316,9 @@ namespace PredmetniZadatak1
                     main.MyCanvas.Children.Add(ellipse);
                     Canvas.SetLeft(ellipse, StartingX);
                     Canvas.SetTop(ellipse, StartingY);
+
+                    ellipse.MouseLeftButtonUp += main.object_clicked;
+
                     this.Close();
                 }
                 if (typeComponent == "Rectangle")
@@ -280,6 +333,9 @@ namespace PredmetniZadatak1
                     main.MyCanvas.Children.Add(rectangle);
                     Canvas.SetLeft(rectangle, startingX);
                     Canvas.SetTop(rectangle, startingY);
+
+                    rectangle.MouseLeftButtonUp += main.object_clicked;
+
                     this.Close();
                 }
                 if (typeComponent == "Polygon")
@@ -296,6 +352,8 @@ namespace PredmetniZadatak1
                     polygon.Stroke = borderColorCmbBox;
                     polygon.StrokeThickness = Double.Parse(objBorderThickness.Text);
                     main.MyCanvas.Children.Add(polygon);
+
+                    polygon.MouseLeftButtonUp += main.object_clicked;
 
                     main.MyCanvas.Children.RemoveRange(main.MyCanvas.Children.Count - 2 * main.polygonPoints.Count, 2 * main.polygonPoints.Count - 1);
                     main.polygonPoints.Clear();
@@ -349,6 +407,41 @@ namespace PredmetniZadatak1
                 int length = words.Length;
                 ImgPath = words[length - 1];
             }
-        }       
+        }
+
+        private void changeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            bool isValid = true;
+            double borderThiccness;
+
+            if ((!Double.TryParse(objBorderThickness.Text, out borderThiccness) || borderThiccness <= 0) && objBorderThickness.Visibility == Visibility.Visible)
+            {
+                isValid = false;
+                objBorderThickness.BorderBrush = Brushes.Red;
+            }
+            else
+                objBorderThickness.BorderBrush = Brushes.Green;
+
+
+
+            if (isValid == false)
+            {
+                MessageBox.Show("Enter valid data!");
+            }
+            else
+            {
+                SolidColorBrush fillColor = new SolidColorBrush(FillColor);
+                SolidColorBrush borderColor = new SolidColorBrush(BorderColor);
+
+                if (typeComponent != "Image")
+                {
+                    Shape.Fill = fillColor;
+                    Shape.Stroke = borderColor;
+                    Shape.StrokeThickness = Double.Parse(objBorderThickness.Text);
+                    //Shape.Name = "shape_" + cmbBox1.SelectedIndex.ToString() + "_" + cmbBox2.SelectedIndex.ToString();
+                    this.Close();
+                }
+            }
+        }
     }
 }

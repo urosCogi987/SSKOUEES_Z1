@@ -66,11 +66,49 @@ namespace PredmetniZadatak1
 
         private void MyCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            clickPoint = e.GetPosition(this);
+            //clickPoint = e.GetPosition(this);
+        }
+
+        public void object_clicked(object sender, EventArgs e)
+        {
+            string objectCalled = sender.ToString().Split('.')[3];
+
+            if (objectCalled.Trim().ToLower() == "ellipse")
+            {
+                Ellipse ellipse = sender as Ellipse;
+                ShapeSpecification window = new ShapeSpecification("Ellipse", new Point(), null, true, ellipse);
+                window.ShowDialog();
+                return;
+
+            }
+            else if (objectCalled.Trim().ToLower() == "rectangle")
+            {
+                Rectangle rectangle = sender as Rectangle;
+                ShapeSpecification window = new ShapeSpecification("Rectangle", new Point(), null, true, rectangle);
+                window.ShowDialog();
+                return;
+
+            }
+            else if (objectCalled.Trim().ToLower() == "polygon")
+            {
+                Polygon polygon = sender as Polygon;
+                ShapeSpecification window = new ShapeSpecification("Polygon", new Point(), null, true, polygon);
+                window.ShowDialog();
+                return;
+            }
+            else
+            {
+                Image image = sender as Image;
+                ShapeSpecification window = new ShapeSpecification("Image", new Point(), null, true, null, image);
+                window.ShowDialog();
+                return;
+            }
+
+
         }
 
         private void MyCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
+        {            
             // Draw the correct shape
             switch (currentShape)
             {
@@ -193,6 +231,9 @@ namespace PredmetniZadatak1
             }
         }
 
-        
+        private void Object_is_clicked(object sender, MouseButtonEventArgs e)
+        {
+            Console.WriteLine("succ diss dicc");
+        }
     }
 }
