@@ -58,6 +58,7 @@
     <Compile Include="ShapeSpecification.xaml.cs">
       <DependentUpon>ShapeSpecification.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UndoRedoClear.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

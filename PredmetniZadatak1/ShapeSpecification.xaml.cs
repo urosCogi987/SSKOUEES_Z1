@@ -32,12 +32,10 @@ namespace PredmetniZadatak1
         private string objborderthickness;
         private string typeComponent = String.Empty;
 
+        private Shape shape;
+
         private string imgpath;
         private Image img;
-
-        
-        
-
 
 
         // Starting coordinates
@@ -45,15 +43,13 @@ namespace PredmetniZadatak1
         private double startingY;
         private List<Point> polygonPoints;
 
-        private Shape shape;
+        
 
         public Shape Shape
         {
             get { return shape; }
             set { shape = value; }
         }
-
-
 
         public string ObjWidth
         {
@@ -200,7 +196,7 @@ namespace PredmetniZadatak1
                 heightTextBlock.Visibility = Visibility.Hidden;
                 objHeight.Visibility = Visibility.Hidden;
                 ChoseImageBtn.Visibility = Visibility.Hidden;
-                imageSource.Visibility = Visibility.Hidden;
+                imageSource.Visibility = Visibility.Hidden;                
             }
             else
             {
@@ -225,7 +221,7 @@ namespace PredmetniZadatak1
                     objBorderThickness.Visibility = Visibility.Hidden;
                     ChoseImageBtn.Visibility = Visibility.Visible;
                     imageSource.Visibility = Visibility.Visible;
-
+                    
                     Img = image;
                 }
                 else if (typeComponent == "Polygon")
@@ -322,10 +318,14 @@ namespace PredmetniZadatak1
                     ellipse.Width = Double.Parse(objWidth.Text);
                     ellipse.Height = Double.Parse(objHeight.Text);
                     ellipse.StrokeThickness = Double.Parse(objBorderThickness.Text);
+                    
                     main.MyCanvas.Children.Add(ellipse);
+                    main.undoRedoClearObject.AddUndoStackItem(ellipse);
+                    
+
                     Canvas.SetLeft(ellipse, StartingX);
                     Canvas.SetTop(ellipse, StartingY);
-
+                    
                     ellipse.MouseLeftButtonUp += main.object_clicked;
 
                     this.Close();
@@ -339,7 +339,10 @@ namespace PredmetniZadatak1
                     rectangle.Width = Double.Parse(objWidth.Text);
                     rectangle.Height = Double.Parse(objHeight.Text);
                     rectangle.StrokeThickness = Double.Parse(objBorderThickness.Text);
+
                     main.MyCanvas.Children.Add(rectangle);
+                    main.undoRedoClearObject.AddUndoStackItem(rectangle);
+
                     Canvas.SetLeft(rectangle, startingX);
                     Canvas.SetTop(rectangle, startingY);
 
@@ -365,6 +368,7 @@ namespace PredmetniZadatak1
                     polygon.MouseLeftButtonUp += main.object_clicked;
 
                     main.MyCanvas.Children.RemoveRange(main.MyCanvas.Children.Count - 2 * main.polygonPoints.Count, 2 * main.polygonPoints.Count - 1);
+                    main.undoRedoClearObject.AddUndoStackItem(polygon);
                     main.polygonPoints.Clear();
 
                     this.Close();
@@ -374,11 +378,12 @@ namespace PredmetniZadatak1
                     Img.Width = Double.Parse(objWidth.Text);
                     Img.Height = Double.Parse(objHeight.Text);
                     Img.Stretch = Stretch.Fill;
-                    main.MyCanvas.Children.Add(Img);
+
+                    main.MyCanvas.Children.Add(Img);                    
+                    main.undoRedoClearObject.AddUndoStackItem(Img);
 
                     Canvas.SetLeft(Img, StartingX);
                     Canvas.SetTop(Img, StartingY);
-
 
                     Img.Name = "image_" + StartingX + "_" + StartingY;
                     this.Close();

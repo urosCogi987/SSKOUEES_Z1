@@ -21,48 +21,22 @@ namespace PredmetniZadatak1
     public partial class MainWindow : Window
     {
         public List<Point> polygonPoints;
+        public UndoRedoClear undoRedoClearObject;
 
         private enum MyShape
         {
             Ellipse, Rectangle, Polygon, Image
         };
 
-        private MyShape currentShape = MyShape.Ellipse;
-        Point clickPoint;
+        private MyShape currentShape = MyShape.Ellipse;        
 
         public MainWindow()
         {
             InitializeComponent();
             polygonPoints = new List<Point>();
-        }
-
-        //private void AddOrRemoveItem(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (e.OriginalSource is Rectangle)
-        //    {
-        //        Rectangle activeRectangle = (Rectangle)e.OriginalSource;
-
-        //        MyCanvas.Children.Remove(activeRectangle);
-        //    }
-        //    else
-        //    {
-        //        customColor = new SolidColorBrush(Color.FromRgb((byte)r.Next(1, 255), (byte)r.Next(1, 255), (byte)r.Next(1, 255)));
-
-        //        Rectangle newRectangle = new Rectangle
-        //        {
-        //            Width = 50,
-        //            Height = 50,
-        //            Fill = customColor,
-        //            StrokeThickness = 3,
-        //            Stroke = Brushes.Black
-        //        };
-
-        //        Canvas.SetLeft(newRectangle, Mouse.GetPosition(MyCanvas).X);
-        //        Canvas.SetTop(newRectangle, Mouse.GetPosition(MyCanvas).Y);
-
-        //        MyCanvas.Children.Add(newRectangle);
-        //    }
-        //}
+            UndoRedoClear undoRedoClearO = new UndoRedoClear();
+            undoRedoClearObject = undoRedoClearO;
+        }        
 
         private void MyCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -79,7 +53,7 @@ namespace PredmetniZadatak1
                 ShapeSpecification window = new ShapeSpecification("Ellipse", new Point(), null, true, ellipse);
                 window.ShowDialog();
                 return;
-
+                
             }
             else if (objectCalled.Trim().ToLower() == "rectangle")
             {
@@ -87,7 +61,7 @@ namespace PredmetniZadatak1
                 ShapeSpecification window = new ShapeSpecification("Rectangle", new Point(), null, true, rectangle);
                 window.ShowDialog();
                 return;
-
+                
             }
             else if (objectCalled.Trim().ToLower() == "polygon")
             {
@@ -155,17 +129,49 @@ namespace PredmetniZadatak1
 
         private void UndoButton_Click(object sender, RoutedEventArgs e)
         {
+            if (undoRedoClearObject.CheckIfUndoEmpty())
+            {
+                UIElement canvasObj = undoRedoClearObject.RemoveUndoStackItem();
+                MyCanvas.Children.Remove(canvasObj);
+                undoRedoClearObject.AddRedoStackItem(canvasObj);
 
+                // if objects were lines of polygon                
+                if ((canvasObj is Ellipse) && canvasObj.Opacity == 0.7)
+                {
+                    if (undoRedoClearObject.CheckIfUndoEmpty())
+                    {
+                        UIElement lineObj = undoRedoClearObject.RemoveUndoStackItem();
+                        MyCanvas.Children.Remove(lineObj);
+                        undoRedoClearObject.AddRedoStackItem(lineObj);
+                    }
+                }           
+                
+                //if (canvasObj is Polygon)
+            }
+            else
+            {
+                MessageBox.Show("Nothing more to Undo.");
+            }
         }
 
         private void RedoButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (undoRedoClearObject.CheckIfRedoEmpty())
+            {
+                UIElement canvasObj = undoRedoClearObject.RemoveRedoStackItem();
+                MyCanvas.Children.Add(canvasObj);
+                undoRedoClearObject.AddUndoStackItem(canvasObj);
+            }
+            else
+            {
+                MessageBox.Show("Nothing to Redo.");
+            }
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
-        {
-
+        {            
+            undoRedoClearObject.Clear();
+            MyCanvas.Children.Clear();
         }
 
         private void DrawEllipse()
@@ -214,26 +220,25 @@ namespace PredmetniZadatak1
                 dot.Height = 3;
                 dot.Width = 3;
                 dot.Fill = new SolidColorBrush(Colors.Black);
+                dot.Opacity = 0.7;
 
                 if (polygonPoints.Count > 0)
                 {
                     Line line = new Line() { X1 = polygonPoints[polygonPoints.Count - 1].X, Y1 = polygonPoints[polygonPoints.Count - 1].Y,
                         X2 = pointPosition.X, Y2 = pointPosition.Y, Stroke = Brushes.Black };
                     MyCanvas.Children.Add(line);
+                    undoRedoClearObject.AddUndoStackItem(line);
                 }
                 
                 MyCanvas.Children.Add(dot);
+                undoRedoClearObject.AddUndoStackItem(dot);
+
                 Canvas.SetLeft(dot, pointPosition.X);
                 Canvas.SetTop(dot, pointPosition.Y);
 
                 polygonPoints.Add(pointPosition);
                 
             }
-        }
-
-        private void Object_is_clicked(object sender, MouseButtonEventArgs e)
-        {
-            Console.WriteLine("succ diss dicc");
-        }
+        }        
     }
 }
