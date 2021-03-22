@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="ShapeSpecification" Height="330" Width="300" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid Background="BlanchedAlmond">
+    <Grid Background="#FFEAC678">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"></ColumnDefinition>
             <ColumnDefinition Width="150"></ColumnDefinition>
@@ -52,15 +52,15 @@
         </ComboBox>
         <TextBox Name="objBorderThickness" Grid.Row="5" Grid.Column="1" Margin="0,5,10,0" Text="{Binding Path=ObjBorderThickness}"></TextBox>
 
-        <Button Name="cancelBtn" Content="Cancel" Grid.Row="6" Grid.Column="0" Margin="5,6,5,5" Click="cancelBtn_Click"></Button>
-        <Button Name="drawBtn" Content="Draw" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="drawBtn_Click"></Button>
+        <Button Name="cancelBtn" Content="Cancel" Grid.Row="6" Grid.Column="0" Margin="5,6,5,5" Click="cancelBtn_Click" Background="CornflowerBlue"></Button>
+        <Button Name="drawBtn" Content="Draw" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="drawBtn_Click" Background="CornflowerBlue"></Button>
 
         <!--For Image-->
-        <Button Name="ChoseImageBtn" Content="Chose Image" Grid.Row="3" Click="ChoseImageBtn_Click" Margin="10,6,5,0"></Button>
-        <TextBlock Name="imageSource" Grid.Row="3" Background="white" Grid.Column="1" FontSize="14" Text="{Binding Path=ImgPath}" 
+        <Button Name="ChoseImageBtn" Content="Chose Image" Grid.Row="4" Grid.ColumnSpan="2" Width="100" Click="ChoseImageBtn_Click" Margin="10,6,5,0" Background="CornflowerBlue"></Button>
+        <TextBlock Name="imageSource" Grid.Row="5" Grid.ColumnSpan="2" Background="white" Width="200" FontSize="14" Text="{Binding Path=ImgPath}" 
                    VerticalAlignment="Center"  Margin="10,0,0,0"></TextBlock>
         
         <!--Change Item-->
-        <Button Name="changeBtn" Content="Change" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="changeBtn_Click"></Button>
+        <Button Name="changeBtn" Content="Change" Grid.Row="6" Grid.Column="1" Margin="0,6,10,5" Click="changeBtn_Click" Background="CornflowerBlue"></Button>
     </Grid>
 </Window>

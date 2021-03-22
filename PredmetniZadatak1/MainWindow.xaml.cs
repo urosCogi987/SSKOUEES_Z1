@@ -22,6 +22,7 @@ namespace PredmetniZadatak1
     {
         public List<Point> polygonPoints;
         public UndoRedoClear undoRedoClearObject;
+        public bool prevAction = false;
 
         private enum MyShape
         {
@@ -38,14 +39,12 @@ namespace PredmetniZadatak1
             undoRedoClearObject = undoRedoClearO;
         }        
 
-        private void MyCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //clickPoint = e.GetPosition(this);
-        }
+       
 
         public void object_clicked(object sender, EventArgs e)
         {
             string objectCalled = sender.ToString().Split('.')[3];
+            prevAction = true;
 
             if (objectCalled.Trim().ToLower() == "ellipse")
             {
@@ -83,6 +82,12 @@ namespace PredmetniZadatak1
 
         private void MyCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {            
+            if (prevAction == true)
+            {
+                prevAction = false;
+                return;
+            }
+
             // Draw the correct shape
             switch (currentShape)
             {
@@ -95,7 +100,8 @@ namespace PredmetniZadatak1
                     break;
 
                 case MyShape.Polygon:
-                    DrawPolygon();
+                    if (polygonPoints.Count >= 3)
+                        DrawPolygon();
                     break;
 
                 case MyShape.Image:
@@ -109,44 +115,61 @@ namespace PredmetniZadatak1
 
         private void EllipseButton_Click(object sender, RoutedEventArgs e)
         {
-            currentShape = MyShape.Ellipse;            
+            currentShape = MyShape.Ellipse;
+
+            EllipseButton.Background = Brushes.LightBlue;
+            RectangleButton.Background = Brushes.CornflowerBlue;
+            PolygonButton.Background = Brushes.CornflowerBlue;
+            ImageButton.Background = Brushes.CornflowerBlue;
         }
 
         private void RectangleButton_Click(object sender, RoutedEventArgs e)
         {
-            currentShape = MyShape.Rectangle;            
+            currentShape = MyShape.Rectangle;
+
+            EllipseButton.Background = Brushes.CornflowerBlue;
+            RectangleButton.Background = Brushes.LightBlue;
+            PolygonButton.Background = Brushes.CornflowerBlue;
+            ImageButton.Background = Brushes.CornflowerBlue;
         }
 
         private void PolygonButton_Click(object sender, RoutedEventArgs e)
         {
-            currentShape = MyShape.Polygon;            
+            currentShape = MyShape.Polygon;
+
+            EllipseButton.Background = Brushes.CornflowerBlue;
+            RectangleButton.Background = Brushes.CornflowerBlue;
+            PolygonButton.Background = Brushes.LightBlue;
+            ImageButton.Background = Brushes.CornflowerBlue;
         }
 
         private void ImageButton_Click(object sender, RoutedEventArgs e)
         {
             currentShape = MyShape.Image;
+
+            EllipseButton.Background = Brushes.CornflowerBlue;
+            RectangleButton.Background = Brushes.CornflowerBlue;
+            PolygonButton.Background = Brushes.CornflowerBlue;
+            ImageButton.Background = Brushes.LightBlue;
         }
 
         private void UndoButton_Click(object sender, RoutedEventArgs e)
         {
             if (undoRedoClearObject.CheckIfUndoEmpty())
             {
+                if (polygonPoints.Count > 0)
+                {
+                    ClearPolygonPoints();
+                    return;
+                }
+
                 UIElement canvasObj = undoRedoClearObject.RemoveUndoStackItem();
                 MyCanvas.Children.Remove(canvasObj);
-                undoRedoClearObject.AddRedoStackItem(canvasObj);
-
-                // if objects were lines of polygon                
-                if ((canvasObj is Ellipse) && canvasObj.Opacity == 0.7)
-                {
-                    if (undoRedoClearObject.CheckIfUndoEmpty())
-                    {
-                        UIElement lineObj = undoRedoClearObject.RemoveUndoStackItem();
-                        MyCanvas.Children.Remove(lineObj);
-                        undoRedoClearObject.AddRedoStackItem(lineObj);
-                    }
-                }           
-                
-                //if (canvasObj is Polygon)
+                undoRedoClearObject.AddRedoStackItem(canvasObj);                
+            }
+            else if (polygonPoints.Count > 0)
+            {
+                ClearPolygonPoints();
             }
             else
             {
@@ -160,7 +183,7 @@ namespace PredmetniZadatak1
             {
                 UIElement canvasObj = undoRedoClearObject.RemoveRedoStackItem();
                 MyCanvas.Children.Add(canvasObj);
-                undoRedoClearObject.AddUndoStackItem(canvasObj);
+                undoRedoClearObject.AddUndoStackItem(canvasObj);                
             }
             else
             {
@@ -226,12 +249,13 @@ namespace PredmetniZadatak1
                 {
                     Line line = new Line() { X1 = polygonPoints[polygonPoints.Count - 1].X, Y1 = polygonPoints[polygonPoints.Count - 1].Y,
                         X2 = pointPosition.X, Y2 = pointPosition.Y, Stroke = Brushes.Black };
+                    line.Opacity = 0.7;
                     MyCanvas.Children.Add(line);
-                    undoRedoClearObject.AddUndoStackItem(line);
+                    //undoRedoClearObject.AddUndoStackItem(line);
                 }
                 
                 MyCanvas.Children.Add(dot);
-                undoRedoClearObject.AddUndoStackItem(dot);
+                //undoRedoClearObject.AddUndoStackItem(dot);
 
                 Canvas.SetLeft(dot, pointPosition.X);
                 Canvas.SetTop(dot, pointPosition.Y);
@@ -240,5 +264,12 @@ namespace PredmetniZadatak1
                 
             }
         }        
+
+        private void ClearPolygonPoints()
+        {
+            if (polygonPoints.Count > 0)
+            MyCanvas.Children.RemoveRange(MyCanvas.Children.Count - (2 * polygonPoints.Count - 1), 2 * polygonPoints.Count - 1);
+            polygonPoints.Clear();
+        }
     }
 }

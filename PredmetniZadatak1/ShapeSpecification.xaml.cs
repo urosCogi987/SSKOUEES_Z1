@@ -175,8 +175,7 @@ namespace PredmetniZadatak1
             fillColorCmbBox.SelectedIndex = 10;
             borderColorCmbBox.ItemsSource = typeof(Colors).GetProperties();
             borderColorCmbBox.SelectedIndex = 11;
-
-            //drawBtn.Visibility = Visibility.Visible;
+            
             changeBtn.Visibility = Visibility.Hidden;
             if (typeComponent == "Image")
             {
@@ -246,7 +245,7 @@ namespace PredmetniZadatak1
                     Shape = shape;
                     ObjWidth = shape.Width.ToString();
                     ObjHeight = shape.Height.ToString();
-                    // TREBA LEPO DA SE IMENUJE. PUCA OVDE
+                    
                     fillColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[1]);
                     borderColorCmbBox.SelectedIndex = Int32.Parse(shape.Name.Split('_')[2]);
                     
@@ -262,14 +261,12 @@ namespace PredmetniZadatak1
         }
 
         private void drawBtn_Click(object sender, RoutedEventArgs e)
-        {
-            //double resultHeight;
-
+        {            
             MainWindow main = ((MainWindow)Application.Current.MainWindow);
             SolidColorBrush fillColorCmbBoxxx = new SolidColorBrush(FillColor);
             SolidColorBrush borderColorCmbBoxxx = new SolidColorBrush(BorderColor);
 
-            bool isValid = true;
+            bool isValid = true;            
 
             double objectWidth;
             double objectHeight;
@@ -299,18 +296,38 @@ namespace PredmetniZadatak1
             else
                 objBorderThickness.BorderBrush = Brushes.Green;
 
+            if (typeComponent == "Image")
+            {
+                if (Img == null)
+                {                                        
+                    isValid = false;
+                    imageSource.Background = Brushes.Red;
+                }
+                else
+                {
+                    imageSource.Background = Brushes.LightGreen;
+                }
 
+                if (imageSource.Text == "")
+                {
+                    isValid = false;
+                    imageSource.Background = Brushes.Red;
+                }
+                else
+                {
+                    imageSource.Background = Brushes.LightGreen;
+                }
+            }
+            
 
             if (isValid == false)
             {
-                MessageBox.Show("Enter valid data!");
-            }
+                MessageBox.Show("Enter valid data!");                
+            }            
             else
             {
                 if (typeComponent == "Ellipse")
                 {
-
-
                     Ellipse ellipse = new Ellipse();
                     ellipse.Name = "ellipse_" + fillColorCmbBox.SelectedIndex.ToString() + "_" + borderColorCmbBox.SelectedIndex.ToString();  // MORAJU DA IMAJU TACNO OVAKO IME
                     ellipse.Fill = fillColorCmbBoxxx;
@@ -325,8 +342,13 @@ namespace PredmetniZadatak1
 
                     Canvas.SetLeft(ellipse, StartingX);
                     Canvas.SetTop(ellipse, StartingY);
+
+
+                    ellipse.MouseWheel += main.object_clicked;
+
+                    //ellipse.MouseLeftButtonUp += main.object_clicked;
                     
-                    ellipse.MouseLeftButtonUp += main.object_clicked;
+                        
 
                     this.Close();
                 }
@@ -346,7 +368,10 @@ namespace PredmetniZadatak1
                     Canvas.SetLeft(rectangle, startingX);
                     Canvas.SetTop(rectangle, startingY);
 
-                    rectangle.MouseLeftButtonUp += main.object_clicked;
+                    rectangle.MouseWheel += main.object_clicked;
+
+                    //rectangle.MouseLeftButtonUp += main.object_clicked;
+                                            
 
                     this.Close();
                 }
@@ -365,7 +390,9 @@ namespace PredmetniZadatak1
                     polygon.StrokeThickness = Double.Parse(objBorderThickness.Text);
                     main.MyCanvas.Children.Add(polygon);
 
-                    polygon.MouseLeftButtonUp += main.object_clicked;
+                    polygon.MouseWheel += main.object_clicked;
+                    //polygon.MouseLeftButtonUp += main.object_clicked;
+                                        
 
                     main.MyCanvas.Children.RemoveRange(main.MyCanvas.Children.Count - 2 * main.polygonPoints.Count, 2 * main.polygonPoints.Count - 1);
                     main.undoRedoClearObject.AddUndoStackItem(polygon);
@@ -384,6 +411,8 @@ namespace PredmetniZadatak1
 
                     Canvas.SetLeft(Img, StartingX);
                     Canvas.SetTop(Img, StartingY);
+
+                    
 
                     Img.Name = "image_" + StartingX + "_" + StartingY;
                     this.Close();
@@ -455,11 +484,7 @@ namespace PredmetniZadatak1
                     Shape.StrokeThickness = Double.Parse(objBorderThickness.Text);
                     Shape.Name = "shape_" + fillColorCmbBox.SelectedIndex.ToString() + "_" + borderColorCmbBox.SelectedIndex.ToString();
                     this.Close();
-                }
-                else if (typeComponent == "Image")
-                {
-                    
-                }
+                }                
             }
         }
     }
